@@ -1,28 +1,45 @@
 #!/bin/bash
-#Creating my first challenge script for the class
+#Creating my Second challenge script for the class
 
-#This script displays information about a computer
-
-
-hostname -f  
-           #For getting fully-qualified domain of the computer
-echo 'Domain name'
+#This script displays system information about my computer
 
 
-hostnamectl
-            #System operating system and its version 
-echo 'System info'
+
+#These are variables for my script 
+domainname=$(hostname -f)
+
+osv=$(hostnamectl | awk 'NR == 7 {print $3, $4, $5}')
+
+address=$(ifdata -pa ens33)
+
+availablespace=$(df /dev/sda3 | grep -v Available | awk '{print$4}')
 
 
-ip a s ens33 | grep -w inet | awk '{print$2}'
-            #Required ip address for the challenge script   
-echo 'ip address'
 
 
-df /dev/sda3  
-            #shows the required amount of space on root filesystem
-echo  'amount of space on root filesystem'
 
 
-exit
 
+
+
+
+
+
+
+
+
+
+
+
+
+#Creating my script using output template 
+cat <<EOF
+Report for my vm
+==================
+FQDN: $domainname
+Operating system and version: $osv
+Ip address: $address
+Root file system's free space: $availablespace
+===================
+
+EOF
